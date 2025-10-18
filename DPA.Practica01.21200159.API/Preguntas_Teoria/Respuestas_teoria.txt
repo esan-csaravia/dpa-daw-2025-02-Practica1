@@ -11,6 +11,8 @@ Scaffold-DbContext `
   -NoOnConfiguring `
   -Force
 
+  Otra dificultad que me aparecio con el nuevo proyecto fue la de subir los cambios usando el commit, y era que no tenia generado el archivo gitignore dentro d la carpeta de mi proyecto. Se genero el archivo y finalmente pude subir mis cambios
+
 
 b. ¿Qué diferencias notaste entre usar un controlador autogenerado y uno con 
 repository? ¿Qué enfoque prefieres?

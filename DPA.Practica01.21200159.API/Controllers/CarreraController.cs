@@ -2,8 +2,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using DPA.Practica01._21200159.CORE.Infrastructure.Data;
+using DPA.Practica01._21200159.CORE.Core.DTOs;
+using DPA.Practica01._21200159.CORE.Core.Interfaces;
 using DPA.Practica01._21200159.CORE.Infrastructure.Repositories;
 
 namespace DPA.Practica01._21200159.API.Controllers
@@ -12,66 +12,64 @@ namespace DPA.Practica01._21200159.API.Controllers
     [Route("api/[controller]")]
     public class CarreraController : ControllerBase
     {
-        private readonly UniversidadDbContext _context;
+        private readonly ICarreraService _service;
+        private readonly ICarreraRepository _repository;
 
-        public CarreraController(UniversidadDbContext context)
+        public CarreraController(ICarreraService service, ICarreraRepository repository)
         {
-            _context = context;
+            _service = service;
+            _repository = repository;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Carrera>>> GetCarreras()
+        public ActionResult<IEnumerable<CarreraListDTO>> GetCarreras()
         {
-            return await _context.Carreras.ToListAsync();
+            var items = _service.GetAll();
+            var dtos = items.Select(c => new CarreraListDTO { Id = c.Id, Nombre = c.Nombre });
+            return Ok(dtos);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Carrera>> GetCarrera(int id)
+        public async Task<ActionResult<CarreraDTO>> GetCarrera(int id)
         {
-            var carrera = await _context.Carreras.FindAsync(id);
+            var carrera = await _service.GetById(id);
 
             if (carrera == null)
             {
                 return NotFound();
             }
 
-            return carrera;
+            var dto = new CarreraDTO { Id = carrera.Id, Nombre = carrera.Nombre };
+            return Ok(dto);
         }
 
         [HttpPost]
-        public async Task<ActionResult<Carrera>> PostCarrera(Carrera carrera)
+        public async Task<ActionResult<CarreraDTO>> PostCarrera(CarreraCreateDTO createDto)
         {
-            _context.Carreras.Add(carrera);
-            await _context.SaveChangesAsync();
+            var carrera = new Carrera { Nombre = createDto.Nombre };
+            var id = await _service.Create(carrera);
 
-            return CreatedAtAction(nameof(GetCarrera), new { id = carrera.Id }, carrera);
+            var created = await _repository.GetById(id);
+            var dto = new CarreraDTO { Id = created!.Id, Nombre = created.Nombre };
+
+            return CreatedAtAction(nameof(GetCarrera), new { id = dto.Id }, dto);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCarrera(int id, Carrera carrera)
+        public async Task<IActionResult> PutCarrera(int id, CarreraDTO dto)
         {
-            if (id != carrera.Id)
+            if (id != dto.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(carrera).State = EntityState.Modified;
+            if (!await _repository.Exists(id))
+            {
+                return NotFound();
+            }
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CarreraExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            var carrera = new Carrera { Id = dto.Id, Nombre = dto.Nombre };
+            await _service.Update(carrera);
 
             return NoContent();
         }
@@ -79,21 +77,13 @@ namespace DPA.Practica01._21200159.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCarrera(int id)
         {
-            var carrera = await _context.Carreras.FindAsync(id);
-            if (carrera == null)
+            if (!await _repository.Exists(id))
             {
                 return NotFound();
             }
 
-            _context.Carreras.Remove(carrera);
-            await _context.SaveChangesAsync();
-
+            await _service.Delete(id);
             return NoContent();
-        }
-
-        private bool CarreraExists(int id)
-        {
-            return _context.Carreras.Any(e => e.Id == id);
         }
     }
 }
