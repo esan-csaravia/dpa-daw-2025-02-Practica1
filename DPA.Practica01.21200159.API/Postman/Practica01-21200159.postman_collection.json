@@ -1,0 +1,60 @@
+{
+	"info": {
+		"_postman_id": "41923079-2a22-416b-a868-3fb8d19a9373",
+		"name": "Practica01-21200159",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "48422499",
+		"_collection_link": "https://mission-cosmonaut-34430382-8969889.postman.co/workspace/DPA-202502~c3dccae7-5057-4942-a001-0b706a881c4c/collection/48422499-41923079-2a22-416b-a868-3fb8d19a9373?action=share&source=collection_link&creator=48422499"
+	},
+	"item": [
+		{
+			"name": "GetCarrera",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:7233/api/carrera",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7233",
+					"path": [
+						"api",
+						"carrera"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New Carrera",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"Nombre\" : \"Ingenieria de redes\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:7233/api/carrera",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7233",
+					"path": [
+						"api",
+						"carrera"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

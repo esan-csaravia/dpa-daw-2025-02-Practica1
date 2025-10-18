@@ -25,29 +25,26 @@ namespace DPA.Practica01._21200159.API.Controllers
         public ActionResult<IEnumerable<CarreraListDTO>> GetCarreras()
         {
             var items = _service.GetAll();
-            var dtos = items.Select(c => new CarreraListDTO { Id = c.Id, Nombre = c.Nombre });
-            return Ok(dtos);
+            return Ok(items);
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<CarreraDTO>> GetCarrera(int id)
         {
-            var carrera = await _service.GetById(id);
+            var dto = await _service.GetById(id);
 
-            if (carrera == null)
+            if (dto == null)
             {
                 return NotFound();
             }
 
-            var dto = new CarreraDTO { Id = carrera.Id, Nombre = carrera.Nombre };
             return Ok(dto);
         }
 
         [HttpPost]
         public async Task<ActionResult<CarreraDTO>> PostCarrera(CarreraCreateDTO createDto)
         {
-            var carrera = new Carrera { Nombre = createDto.Nombre };
-            var id = await _service.Create(carrera);
+            var id = await _service.Create(createDto);
 
             var created = await _repository.GetById(id);
             var dto = new CarreraDTO { Id = created!.Id, Nombre = created.Nombre };
@@ -63,13 +60,12 @@ namespace DPA.Practica01._21200159.API.Controllers
                 return BadRequest();
             }
 
-            if (!await _repository.Exists(id))
+            if (!await _service.Exists(id))
             {
                 return NotFound();
             }
 
-            var carrera = new Carrera { Id = dto.Id, Nombre = dto.Nombre };
-            await _service.Update(carrera);
+            await _service.Update(dto);
 
             return NoContent();
         }
@@ -77,7 +73,7 @@ namespace DPA.Practica01._21200159.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCarrera(int id)
         {
-            if (!await _repository.Exists(id))
+            if (!await _service.Exists(id))
             {
                 return NotFound();
             }
