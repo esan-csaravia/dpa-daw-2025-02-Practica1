@@ -1,0 +1,26 @@
+a. ¿Qué dificultades tuviste durante el scaffolding y cómo las solucionaste?
+R: La primera dificultad que tuve era el usar el NugetPackageManager, finalmente le pregunte el comando de ejecucion a GithubCopilot y me ayudo
+Scaffold-DbContext `
+  "Server=localhost;Database=UniversidadDB;Trusted_Connection=True;TrustServerCertificate=True" `
+  Microsoft.EntityFrameworkCore.SqlServer `
+  -OutputDir Models `
+  -ContextDir Data `
+  -Context UniversidadDbContext `
+  -UseDatabaseNames `
+  -DataAnnotations `
+  -NoOnConfiguring `
+  -Force
+
+
+b. ¿Qué diferencias notaste entre usar un controlador autogenerado y uno con 
+repository? ¿Qué enfoque prefieres?
+El autogenerado es mucho mas rapido y facil de implementar, sin embargo el de repository es mucho mas escalable y mantenible, prefiero el enfoque de repository que tiene su complejidad pero a largo plazo es mejor.
+
+c. ¿Qué buenas prácticas implementaste (en código real) y por qué?
+Utilice la parte del connection string en el appsettings.json para no tener datos sensibles en el codigo fuente, tambien implemente el patron repository para separar la logica de acceso a datos de la logica de negocio, esto ayuda a mantener el codigo limpio y facil de mantener.
+
+d. ¿Usaste herramientas de IA en esta práctica? (Tranquilo(a) que si es válido) ¿Qué 
+herramientas usaste y en que parte del proyecto?
+Si, utilice Github Copilot para ayudarme a generar codigo del Controller y tambien codigo sugerido para el GET, PUT, DELETE y POST.
+Tambien le pedi a copilot que me ayude a revisar y aplicar las mejoras sobre el scaffolding del DbContext, asi como le pedi que valide algunos errores que tuve en la implementacion.
+GithubCopilot me ayudo mucho a acelerar el desarrollo y a corregir errores que no habia notado, es IMPRESIONANTE el uso de IA dentro de Visual Studio.

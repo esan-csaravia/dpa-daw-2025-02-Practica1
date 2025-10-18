@@ -9,6 +9,21 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.9" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.10">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DPA.Practica01.21200159.CORE\DPA.Practica01.21200159.CORE.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Postman\" />
+    <Folder Include="Preguntas_Teoria\" />
+    <Folder Include="Repositories\" />
   </ItemGroup>
 
 </Project>
